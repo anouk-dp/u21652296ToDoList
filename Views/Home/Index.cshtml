@@ -1,0 +1,177 @@
+﻿@model u21652296ToDoList.Models.IndexViewModel
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1>My To Do List</h1>
+<h2>Prioritization</h2>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <td>Description</td>
+                <td>Priority</td>
+                <td>Due Date</td>
+                <td>CRUD BUTTONS</td>
+            </tr>
+        </thead>
+        @foreach (var item in Model.ToDoLists)
+        {
+            <tr>
+                <td>@item.ListItem.Description</td>
+                <td>@item.ListItemPriority.PriorityName</td>
+                <td>@item.DueDate</td>
+                <td>
+                    <button class="btn btn-primary editToDoListButton" data-toggle="modal" data-target="#editToDoListModal" data-id="@item.TaskID">Edit</button>
+                    <button class="btn btn-info detailsToDoListButton" data-toggle="modal" data-target="#detailsToDoListModal" data-id="@item.TaskID">Details</button>
+                    <button class="btn btn-danger deleteToDoListButton" data-id="@item.TaskID">Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Description</td>
+                <td>CRUD BUTTONS</td>
+            </tr>
+        </thead>
+        @foreach (var item in Model.ListItems)
+        {
+            <tr>
+                <td>@item.Description</td>
+                <td>
+                    <button class="btn btn-primary editListItemButton" data-toggle="modal" data-target="#editListItemModal" data-id="@item.ListItemID">Edit</button>
+                    <button class="btn btn-info detailsListItemButton" data-toggle="modal" data-target="#detailsListItemModal" data-id="@item.ListItemID">Details</button>
+                    <button class="btn btn-danger deleteListItemButton" data-id="@item.ListItemID">Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Priority</td>
+                <td>CRUD BUTTONS</td>
+            </tr>
+        </thead>
+        @foreach (var priority in Model.ListItemPriorities)
+        {
+            <tr>
+                <td>@priority.PriorityName</td>
+                <td>
+                    <button class="btn btn-primary editPriorityButton" data-toggle="modal" data-target="#editPriorityModal" data-id="@priority.PriorityID">Edit</button>
+                    <button class="btn btn-info detailsPriorityButton" data-toggle="modal" data-target="#detailsPriorityModal" data-id="@priority.PriorityID">Details</button>
+                    <button class="btn btn-danger deletePriorityButton" data-id="@priority.PriorityID">Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+</main>
+
+
+<div class="modal fade" id="editToDoListModal" tabindex="-1" role="dialog" aria-labelledby="editToDoListModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detailsToDoListModal" tabindex="-1" role="dialog" aria-labelledby="detailsToDoListModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editListItemModal" tabindex="-1" role="dialog" aria-labelledby="editListItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detailsListItemModal" tabindex="-1" role="dialog" aria-labelledby="detailsListItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editPriorityModal" tabindex="-1" role="dialog" aria-labelledby="editPriorityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detailsPriorityModal" tabindex="-1" role="dialog" aria-labelledby="detailsPriorityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.editToDoListButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Edit", "ToDoListsController")/' + id, function (data) {
+                $('#editToDoListModal .modal-content').html(data);
+                $('#editToDoListModal').modal('show');
+            });
+        });
+
+        $('.detailsToDoListButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Details", "ToDoListsController")/' + id, function (data) {
+                $('#detailsToDoListModal .modal-content').html(data);
+                $('#detailsToDoListModal').modal('show');
+            });
+        });
+        //
+        $('.editPriorityButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Edit", "ListItemPrioritiesController")/' + id, function (data) {
+                $('#editPriorityModal .modal-content').html(data);
+                $('#editPriorityModal').modal('show');
+            });
+        });
+
+        $('.detailsPriorityButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Details", "ListItemPrioritiesController")/' + id, function (data) {
+                $('#detailsPriorityModal .modal-content').html(data);
+                $('#detailsPriorityModal').modal('show');
+            });
+        //
+            $('.editListItemButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Edit", "ListItemsController")/' + id, function (data) {
+                $('#editListItemtModal .modal-content').html(data);
+                $('#editListItemModal').modal('show');
+            });
+        });
+
+            $('.detailsListItemButton').click(function () {
+            var id = $(this).data('id');
+            $.get('@Url.Action("Details", "ListItemsController")/' + id, function (data) {
+                $('#detailsListItemModal .modal-content').html(data);
+                $('#detailsListItemModal').modal('show');
+            });
+        });
+
+            $('#editListItemModal .modal-content').html(data);
+            $('#editListItemModal').modal('show');
+    });
+</script>
